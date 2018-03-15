@@ -74,8 +74,8 @@ The purpose of the model is to predict whether future approvals with auto-approv
 
 ## Logistic Regression Models
 
-#### Model 1 - Referring Provider Only
 
+#### Model 1 - Referring Provider Only
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_ few1.png" width='400'>
 
@@ -115,10 +115,13 @@ The purpose of the model is to predict whether future approvals with auto-approv
 
 <sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
-
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_test_few2.png" width='400'>
 
 <sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
+```
+log odds of approval = -7.7 + 6.68 * ref_tohist + 4.8 * cpt1hist
+```
 
 ## Results
 
@@ -136,4 +139,4 @@ Test | Logistic - Refer To Provider, CPT1| 0.78 | 97.6%
 * Add more CPT codes
 * Learning with Profit Curve to focus on Precision
 * Switch approve = 1 to denial = 1
-* SMOTE or other balancing 
+* SMOTE or other balancing
