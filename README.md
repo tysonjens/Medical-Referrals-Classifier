@@ -131,4 +131,9 @@ Num | Model | ROC-AUC | Precision at 40% AA
  - | - | -
 Test | Logistic - Refer To Provider, CPT1| 0.78 | 97.6%
 
-## Future Directions  
+## Future Directions
+
+* Add more CPT codes
+* Learning with Profit Curve to focus on Precision
+* Switch approve = 1 to denial = 1
+* SMOTE or other balancing 
