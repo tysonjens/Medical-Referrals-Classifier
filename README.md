@@ -79,45 +79,42 @@ The purpose of the model is to predict whether future approvals with auto-approv
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_ few1.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
 
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few1.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
 
 #### Model 2 - Referring Provider & CPT code
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_few2.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
 
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few2.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
 
 #### Model 3 - Logistic w/ all vars w/ Penalty (C = 0.3)
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_loglas3.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
+
 
 #### Model 4 - All variables, y-undersampled
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_ds.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
 #### Model 2 on Test Data
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_test_few2.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_test_few2.png" width='400'>
 
-<sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
 ```
 log odds of approval = -7.7 + 6.68 * ref_tohist + 4.8 * cpt1hist
