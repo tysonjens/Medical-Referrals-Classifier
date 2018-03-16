@@ -1,22 +1,25 @@
 ## Referrals Approval Classifier
 
+#### Background
 A medical provider group reviews and approves or denies over 2 million referrals each year. It is costly to review each referral, so the group "auto-approves" 30% of all referrals from certain specialties when specific care is requested. There is appetite to increase the auto-approval rate to 40-50%, but approving a referral that should be denied is costly.
 
 **Question:** Can a predictive model increase the auto-approval rate while keeping 'false positives' low?
 
+#### Summary -- Approach
+
+Several Logistic Regression models were fit to training data and tuned with validation data. The best model was then applied to previously unseen test data to assess model's ability to predict.
+
+#### Summary - Findings
+
+Presently no logistic regression models are able to achieve the predictive power required for deployment. Other algorithms like Random Forest or Naive Bayes could be applied as next steps.
 
 ## Table of Contents
-1. [Measure of Success](#measure-of-success)
+1. [Measures of Success](#measures-of-success)
 2. [Dataset](#dataset)
-3. [Feature Engineering](#feature-engineering)
-4. [Training, Validation & Test
+      * [Feature Engineering](#feature-engineering)
+      * [Training, Validation & Test
 Sets](#training,-validation-&-test-sets)
 5. [Logistic Regression Models](#logistic-regression-models)
-    * [All in](#all-in)
-    * [All in - Balanced](#all-in---balanced)  
-    * [Select](#select)
-    * [Select - Downsampled](#select---downsampled)
-    * [Results](#results)
 6. [Future Directions](#future-directions)
 
 ## Measures of Success
@@ -75,32 +78,23 @@ The purpose of the model is to predict whether future approvals with auto-approv
 ## Logistic Regression Models
 
 
-#### Model 1 - Referring Provider Only
+#### Model 1 - Refer To Provider Only
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_ few1.png" width='400'>
 
-
-
-
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few1.png" width='400'>
-
 
 
 #### Model 2 - Referring Provider & CPT code
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_few2.png" width='400'>
 
-
-
-
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few2.png" width='400'>
-
 
 
 #### Model 3 - Logistic w/ all vars w/ Penalty (C = 0.3)
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_loglas3.png" width='400'>
-
 
 
 #### Model 4 - All variables, y-undersampled
@@ -128,7 +122,7 @@ Num | Model | ROC-AUC | Precision at 40% AA
 2 |Logistic - Refer To Provider, CPT1 | 0.79 | 97.7%
 3 | Logistic w/ penalty (lasso, C=.3), all vars | 0.79 | 97.5%
 4 |Logistic, all vars, y-undersampled | 0.79 | 97.6%
- - | - | -
+ --- | --- | --- | ---
 Test | Logistic - Refer To Provider, CPT1| 0.78 | 97.6%
 
 ## Future Directions
