@@ -17,7 +17,7 @@ Presently no logistic regression models are able to achieve the predictive power
 
 ## Table of Contents
 1. [Measures of Success](#measures-of-success)
-2. [Datas](#data)
+2. [Data](#data)
       * [Feature Engineering](#feature-engineering)
       * [Training, Validation and Test
 Sets](#training,-validation-and-test-sets)
@@ -33,7 +33,6 @@ Sets](#training,-validation-and-test-sets)
 At present the auto-approval rate for referrals is 30% - a new model would need to approve at 40% to be worth the implementation effort. The model also needs to be precise - to have very few false positives.  This is because approving referrals that would normally be denied could be costly - worse, it could be for a treatment that isn't medically necessary for the patient.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_goal.png" width='400'>
-
 <sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
 ## Data
