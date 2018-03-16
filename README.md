@@ -27,8 +27,10 @@ Sets](#training,-validation-and-test-sets)
 
 ## Measures of Success
 
-1. Precision at 40% auto approval rate
-2. Area under the receiver operation characteristc curve (AUC-ROC)
+1. Area under the receiver operation characteristc curve (AUC-ROC)
+2. Precision at 40% auto approval rate
+
+At present the auto-approval rate for referrals is 30% - a new model would need to approve at 40% to be worth the implementation effort. The model also needs to be precise - to have very few false positives.  This is because approving referrals that would normally be denied could be costly - worse, it could be for a treatment that isn't medically necessary for the patient.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_goal.png" width='400'>
 
@@ -43,10 +45,10 @@ Over two million referrals placed by physicians for patients to see a specialist
 
 Name | Variable Name | Description | Type
 ------|----------|--------|----
-**Approve** (target) | refstat | 1 if referral approved, else 0 | bin
+**Approve** (target) | is_approve | 1 if referral approved, else 0 | bin
 Date Received | dater | time / date stamp of when referral received | date
 Registration Date | regdate | Date when the member registered with plan | date
-Sex | sex | 1 if male, else 0 | bin
+Sex | is_male | 1 if male, else 0 | bin
 Age | age | integer age of patient | int
 Priority | priority_ | Physicians can indicate "Routine", "urgent", "emergency" | cat (4)
 Patient Request | pat_req | 1 if patient requested the referral, else 0 | bin
@@ -99,7 +101,7 @@ log odds of approval = X1 + refer_to_prov * X2 + e
 
 
 
-#### Model 2 - Referring Provider & CPT code
+#### Model 2 - Refer To Provider & CPT code
 
 Adds "cpt code 1" to Model 1. CPT codes indicate what service, procedure, or action the receiving physician should perform. It is well known that some routine services (like an office visit) approve at very high rates. Others approval at lower rates and so we hypothesize it will be predictive.
 
@@ -113,17 +115,23 @@ log odds of approval = X1 + refer_to_prov * X2 + cpt1hist * X3+ e
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few2.png" width='400'>
 
 
-#### Model 3 - Logistic w/ all vars w/ Penalty (C = 0.3)
+#### Model 3 - Logistic - L1 Penalty (C = 0.3)
+
+The L1 penalty is means of regularization like the lasso. It helps to avoid overfitting when dimensions increase. In this model all variables are considered.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_loglas3.png" width='400'>
 
 
 #### Model 4 - All variables, y-undersampled
 
+The classes in the target are imbalanced, so models can be prone to simply predict the majority class and be correct, in this case, 92% of the time. To ensure the model considers both classes equally likely, in this model we undersample "approvals" to be 50% of the training set.
+
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_ds.png" width='400'>
 
 
 #### Model 2 on Test Data
+
+When tested on our validation (September) data Model 2 performed the best. Applying the model to previously unseen data we see from our performance measures that the model generalizes well.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_test_few2.png" width='400'>
 
