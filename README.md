@@ -1,7 +1,7 @@
 ## Referrals Approval Classifier
 
 #### Background
-A medical provider group reviews and approves or denies over 2 million referrals each year. It is costly to review each referral, so the group "auto-approves" 30% of all referrals from certain specialties when specific care is requested. There is appetite to increase the auto-approval rate to 40-50%, but approving a referral that should be denied is costly.
+A medical provider group reviews and approves or denies over 2 million referrals each year. It is costly to review each referral, so the group "auto-approves" 30% of all referrals from certain specialties when common types of care are requested (i.e., initial cardiology visit). There is appetite to increase the auto-approval rate to 40-50%, but approving a referral that should be denied is costly.
 
 Increasing the auto-approve rate would lower costs for the medical group, and decrease the time to return decisions to patients.
 
@@ -9,11 +9,11 @@ Increasing the auto-approve rate would lower costs for the medical group, and de
 
 #### Summary -- Approach
 
-Several Logistic Regression models were fit to training data and tuned with validation data. The best model was then applied to previously unseen test data to assess model's ability to predict.
+Several logistic regression models were fit to training data and tuned with validation data. The best model was then applied to previously unseen test data to assess model's ability to predict. Since the model should approve *future* referrals based *historical* data, chronological training, validation, and test set are used.
 
 #### Summary - Findings
 
-Presently no logistic regression models are able to achieve the predictive power required for deployment. Other algorithms like Random Forest or Naive Bayes could be applied as next steps.
+Presently no logistic regression model has the predictive power required for deployment. Other algorithms like Random Forest or Naive Bayes could be applied.
 
 ## Table of Contents
 1. [Measures of Success](#measures-of-success)
@@ -22,22 +22,22 @@ Presently no logistic regression models are able to achieve the predictive power
       * [Training, Validation and Test
 Sets](#training,-validation-and-test-sets)
 3. [Logistic Regression Models](#logistic-regression-models)
-4. [Results](#results)
-5. [Future Directions](#future-directions)
+4. [Summary of Results](#summary-of-results)
+5. [Next Steps](#next-steps)
 
 ## Measures of Success
 
 1. Area under the receiver operation characteristc curve (AUC-ROC)
 2. Precision at 40% auto approval rate
 
-At present the auto-approval rate for referrals is 30% - a new model would need to approve at 40% to be worth the implementation effort. The model also needs to be precise - to have very few false positives.  This is because approving referrals that would normally be denied could be costly - worse, it could be for a treatment that isn't medically necessary for the patient.
+At present the auto-approval rate for referrals is 30% - a new model would need to approve at least 40% of referrals to be worth the implementation effort. The model also needs to be precise - to have very few false positives.  This is because approving referrals that would normally be denied could be costly - worse, it could be for a treatment that isn't medically necessary for the patient.
 
-<img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_goal.png" width='400'>
+<img alt="Prescision vs. Auto Approval Rate" src="imgs/AA_prec_goal.png" width='400'>
 <sub><b>Figure: </b> Success is precision > 98% while auto-approvals are greater than 40%. </sub>
 
 ## Data
 
-Over two million referrals placed by physicians for patients to see a specialist during the 2017 calendar year.
+Over two million referrals placed by physicians for patients during the 2017 calendar year.
 
 
 #### Data Dictionary
@@ -58,8 +58,8 @@ Procedure Code | cpt1, cpt2 ... | What is being requested in the referral | cat 
 
 *HIPAA Note: all personal information was scrubbed from the data prior to use.  Age and sex are available for each referral, but the data contain no keys to tie referrals to patients.*
 
-#### Correlations Between Target and Predictors
-<img alt="Example of tumor segmentation overlay on T2" src="imgs/corrheat.png" width='500'>
+#### Correlation Coefficients Between Target and Predictors
+<img alt="Correlation Matrix" src="imgs/corrheat.png" width='500'>
 
 <sub><b>Figure: </b> Correlations between approvals and predictors. </sub>
 
@@ -68,8 +68,6 @@ Procedure Code | cpt1, cpt2 ... | What is being requested in the referral | cat 
 * Categorical predictors were translated to continuous variables through the following steps:
   * Using training data, historical averages of the target variable were calculated *for each level*. For example, in the ref_to_spec column, "Cardiology" is one of 50 levels and historically approve at 96%.
   * In a new column, the historical averages are transcribed for each level.
-
-It is important to engineer the features from "historical" data in order for the classifier to be viable.
 
 #### Training, Validation and Test Sets
 
@@ -97,7 +95,7 @@ log odds of approval = X1 + refer_to_prov * X2 + e
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few1.png" width='400'>
 
-
+**Result** The model fails to meet auto-approval & precision requirements.
 
 
 #### Model 2 - Refer To Provider & CPT code
@@ -113,12 +111,16 @@ log odds of approval = X1 + refer_to_prov * X2 + cpt1hist * X3+ e
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_few2.png" width='400'>
 
+**Result** The model fails to meet auto-approval & precision requirements.
+
 
 #### Model 3 - Logistic - L1 Penalty (C = 0.3)
 
 The L1 penalty is means of regularization like the lasso. It helps to avoid overfitting when dimensions increase. In this model all variables are considered.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_loglas3.png" width='400'>
+
+**Result** The model fails to meet auto-approval & precision requirements.
 
 
 #### Model 4 - All variables, y-undersampled
@@ -127,13 +129,15 @@ The classes in the target are imbalanced, so models can be prone to simply predi
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_ds.png" width='400'>
 
+**Result** The model fails to meet auto-approval & precision requirements.
 
-#### Model 2 on Test Data
+___
+
+#### Model 2 applied to Test Data
 
 When tested on our validation (September) data Model 2 performed the best. Applying the model to previously unseen data we see from our performance measures that the model generalizes well.
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/ROC_test_few2.png" width='400'>
-
 
 <img alt="Example of tumor segmentation overlay on T2" src="imgs/AA_prec_test_few2.png" width='400'>
 
@@ -142,9 +146,9 @@ When tested on our validation (September) data Model 2 performed the best. Apply
 log odds of approval = -7.7 + 6.68 * ref_tohist + 4.8 * cpt1hist
 ```
 
-## Results
+## Summary of Results
 
-None of the models met the 98% precision level at the 40% auto approval rate.
+None of the models met the 98% precision level at the 40% auto approval rate requirements.
 
 Num | Model | ROC-AUC | Precision at 40% AA
 ---|----|-----|----
@@ -154,11 +158,12 @@ Num | Model | ROC-AUC | Precision at 40% AA
 4 |Logistic, all vars, y-undersampled | 0.79 | 97.6%
 Test | Logistic - Refer To Provider, CPT1| 0.78 | 97.6%
 
-## Future Directions
+## Next Steps
 
 * Use the 2nd, 3rd, 4th, etc. CPT codes.  
 * Use number of CPT codes as a feature.
-* Machine earning with Profit Curve to focus on precision - LogisticRegression CV()?
+* Machine learning with Profit Curve to focus on precision - LogisticRegression CV()?
 * Switch approve = 1 to denial = 1
 * SMOTE or other balancing
 * Use models that can work on sparse matricies, and One Hot Encode the categorical variables.
+* Use other models like Random Forest or Naive Bayes.
